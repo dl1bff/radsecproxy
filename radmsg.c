@@ -16,6 +16,8 @@
 #include <nettle/hmac.h>
 #include <openssl/rand.h>
 
+#include "tlv-rewrite.h"
+
 #define RADLEN(x) ntohs(((uint16_t *)(x))[1])
 
 void radmsg_free(struct radmsg *msg) {
@@ -244,6 +246,23 @@ uint8_t *radmsg2buf(struct radmsg *msg, uint8_t *secret, int secret_len) {
 
     for (node = list_first(msg->attrs); node; node = list_next(node)) {
         tlv = (struct tlv *)node->data;
+       if (tlv->t == 30 || tlv->t == 31)
+       {
+          char printbuf[50];
+         if ((tlv->l >= 17) && (tlv->l < 45))
+         {
+           tlv2buf( (uint8_t *) printbuf, tlv );
+           printbuf[tlv->l + 2] = 0;
+            debug(DBG_DBG, "radmsg2buf: before type %d, %s", tlv->t, printbuf + 2);
+
+           tlv_rewrite( tlv->v, tlv->t, tlv->l );
+
+           tlv2buf( (uint8_t *) printbuf, tlv );
+           printbuf[tlv->l + 2] = 0;
+            debug(DBG_DBG, "radmsg2buf: after  type %d, %s", tlv->t, printbuf + 2);
+         }
+       }
+
         p = tlv2buf(p, tlv);
         if (tlv->t == RAD_Attr_Message_Authenticator && secret)
             msgauth = ATTRVAL(p);
