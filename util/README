@@ -1,0 +1,17 @@
+
+
+
+
+
+
+# enable simple systemd-service
+
+addgroup --system radsecproxy
+adduser --system --ingroup radsecproxy radsecproxy
+
+cp ../radsecproxy /usr/local/sbin
+cp radsecproxy.service /etc/systemd/system
+
+systemctl enable radsecproxy.service
+
+systemctl start radsecproxy.service

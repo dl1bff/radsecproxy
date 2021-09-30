@@ -1,0 +1,15 @@
+
+[Unit]
+Description=radsecproxy service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=radsecproxy
+Group=radsecproxy
+ExecStart=/usr/local/sbin/radsecproxy -f -c /etc/radsecproxy.conf
+Restart=always
+RestartSec=20
+
+[Install]
+WantedBy=multi-user.target
