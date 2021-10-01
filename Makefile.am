@@ -42,8 +42,8 @@ AM_CPPFLAGS = -DSYSCONFDIR=\"$(sysconfdir)\"
 AM_CFLAGS = \
 	-g -Wall -Werror -fno-strict-aliasing @SSL_CFLAGS@ @TARGET_CFLAGS@
 
-radsecproxy_LDFLAGS = @SSL_LDFLAGS@ @TARGET_LDFLAGS@ -lsqlite3
-radsecproxy_LDADD = librsp.a @SSL_LIBS@
+radsecproxy_LDFLAGS = @SSL_LDFLAGS@ @TARGET_LDFLAGS@ 
+radsecproxy_LDADD = librsp.a @SSL_LIBS@ -lsqlite3
 radsecproxy_conf_LDFLAGS = @TARGET_LDFLAGS@
 radsecproxy_hash_LDADD = fticks_hashmac.o hash.o list.o
 
